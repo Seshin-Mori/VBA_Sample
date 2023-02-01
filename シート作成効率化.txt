@@ -1,0 +1,20 @@
+Sub AddSheetsFromSelectedColumn()
+    Dim ws As Worksheet
+    Dim selectedRange As Range
+    Dim lastRow As Long
+    Dim i As Long
+
+    Set ws = ActiveSheet
+    Set selectedRange = Selection
+
+    lastRow = ws.Cells(ws.Rows.Count, selectedRange.Column).End(xlUp).Row
+
+    For i = 1 To lastRow
+        If Len(ws.Cells(i, selectedRange.Column).Value) > 0 Then
+            Sheets.Add After:=Sheets(Sheets.Count)
+            Sheets(Sheets.Count).Name = ws.Cells(i, selectedRange.Column).Value
+        Else
+            Exit For
+        End If
+    Next i
+End Sub
