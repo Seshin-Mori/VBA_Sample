@@ -1,0 +1,35 @@
+Sub SearchAndOpenFiles()
+    Dim folderPath As String
+    Dim fileName As String
+    Dim searchText As String
+    Dim wb As Workbook
+    Dim ws As Worksheet
+    Dim foundCell As Range
+
+    folderPath = ""
+    searchText = InputBox("Enter で検索開始:")
+
+    If Len(searchText) = 0 Then
+        Exit Sub
+    End If
+
+    fileName = Dir(folderPath & "*.xlsx*")
+
+    Do While fileName <> ""
+        Set wb = Workbooks.Open(folderPath & fileName)
+
+        For Each ws In wb.Sheets
+            Set foundCell = ws.Cells.Find(What:=searchText, LookIn:=xlValues, LookAt:=xlPart)
+            If Not foundCell Is Nothing Then
+                ws.Activate
+                foundCell.Select
+                Exit Sub
+            End If
+        Next ws
+
+        wb.Close False
+        fileName = Dir()
+    Loop
+
+    MsgBox "見つかりませんでした"
+End Sub
